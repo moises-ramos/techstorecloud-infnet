@@ -8,22 +8,12 @@
 // Configuração da API
 // ---------------------------------------------------------
 
-// Altere para a URL do seu Azure App Service em produção
-// Ex: https://app-techstore-api.azurewebsites.net
-const API_BASE_URL = 'https://localhost:7100';
+const API_BASE_URL = 'https://app-techstore-api-f2f7fhhjbge6bvgn.canadacentral-01.azurewebsites.net';
 const API_PRODUTOS = `${API_BASE_URL}/api/produtos`;
-
-// ---------------------------------------------------------
-// Estado da aplicação
-// ---------------------------------------------------------
 
 let produtos = [];
 let produtoParaExcluir = null;
 let modoEdicao = false;
-
-// ---------------------------------------------------------
-// Referências DOM
-// ---------------------------------------------------------
 
 const formProduto = document.getElementById('formProduto');
 const tabelaProdutos = document.getElementById('tabela-produtos');
@@ -34,10 +24,6 @@ const btnCancelEdit = document.getElementById('btn-cancel-edit');
 const searchInput = document.getElementById('search-input');
 const emptyState = document.getElementById('empty-state');
 const tableContainer = document.getElementById('tabela-produtos-container');
-
-// ---------------------------------------------------------
-// Inicialização
-// ---------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarProdutos();
@@ -64,7 +50,7 @@ async function carregarProdutos() {
         tabelaProdutos.innerHTML = `
             <tr>
                 <td colspan="6" class="loading-cell">
-                    <span style="color: var(--rose-400);">❌ Erro ao conectar com a API</span>
+                    <span style="color: var(--rose-400);">Erro ao conectar com a API</span>
                     <br><small style="color: var(--text-muted);">${erro.message}</small>
                 </td>
             </tr>
@@ -119,16 +105,16 @@ formProduto.addEventListener('submit', async function (event) {
 
         if (modoEdicao) {
             cancelarEdicao();
-            showToast('✅ Produto atualizado com sucesso!', 'success');
+            showToast('Produto atualizado com sucesso!', 'success');
         } else {
-            showToast('✅ Produto cadastrado com sucesso!', 'success');
+            showToast('Produto cadastrado com sucesso!', 'success');
         }
 
         await carregarProdutos();
 
     } catch (erro) {
         console.error('Erro ao salvar produto:', erro);
-        showToast('❌ Erro ao salvar produto. Tente novamente.', 'error');
+        showToast('Erro ao salvar produto. Tente novamente.', 'error');
     }
 });
 
@@ -218,7 +204,7 @@ async function confirmarExclusao() {
     } catch (erro) {
         console.error('Erro ao excluir produto:', erro);
         fecharModal();
-        showToast('❌ Erro ao excluir produto. Tente novamente.', 'error');
+        showToast('Erro ao excluir produto. Tente novamente.', 'error');
     }
 }
 

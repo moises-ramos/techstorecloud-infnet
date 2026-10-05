@@ -21,11 +21,11 @@ public class MapeadorDeProduto : IEntityTypeConfiguration<Produto>
         builder.Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        // Nome - obrigatório, máximo 200 caracteres
+        // Nome - obrigatório, máximo 250 caracteres
         builder.Property(p => p.Nome)
             .IsRequired()
-            .HasMaxLength(200)
-            .HasColumnType("nvarchar(200)");
+            .HasMaxLength(250)
+            .HasColumnType("nvarchar(250)");
 
         // Descrição - opcional, máximo 1000 caracteres
         builder.Property(p => p.Descricao)

@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TechStore.Application.DTOs;
 
-/// <summary>
-/// DTO para atualização de um produto existente.
-/// </summary>
 public class AtualizaProdutoDto
 {
     [Required(ErrorMessage = "O nome é obrigatório.")]

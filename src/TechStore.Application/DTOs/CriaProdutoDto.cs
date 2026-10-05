@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TechStore.Application.DTOs;
 
-/// <summary>
-/// DTO para criação de um novo produto.
-/// </summary>
 public class CriaProdutoDto
 {
     [Required(ErrorMessage = "O nome é obrigatório.")]

@@ -1,8 +1,5 @@
 namespace TechStore.Application.DTOs;
 
-/// <summary>
-/// DTO de resposta contendo os dados do produto para o frontend.
-/// </summary>
 public class ProdutoRespostaDto
 {
     public int Id { get; set; }

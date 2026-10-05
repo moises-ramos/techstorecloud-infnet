@@ -5,24 +5,17 @@ using TechStore.Domain.Interfaces;
 using TechStore.Infrastructure.Data;
 using TechStore.Infrastructure.Repositories;
 
-// ---------------------------------------------------------
-// Builder — Configuração de Serviços
-// ---------------------------------------------------------
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging estruturado
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-// Application Insights (Observabilidade)
 if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
 {
     builder.Services.AddApplicationInsightsTelemetry();
 }
 
-// Entity Framework Core — Azure SQL Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("TechStoreDb"),
@@ -34,16 +27,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
                 errorNumbersToAdd: null);
         }));
 
-// Dependency Injection — Repository Pattern
 builder.Services.AddScoped<IRepositorioDeProduto, RepositorioDeProduto>();
-
-// Dependency Injection — Service Layer
 builder.Services.AddScoped<IServicoDeProduto, ServicoDeProduto>();
 
-// Controllers com validação automática
 builder.Services.AddControllers();
 
-// Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -51,11 +39,10 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "TechStore API",
         Version = "v1",
-        Description = "API de Cadastro de Produtos — TechStore Cloud MVP"
+        Description = "API de Cadastro de Produtos — TechStore Cloud"
     });
 });
 
-// CORS — permite comunicação do Azure Static Web Apps
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -67,17 +54,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Health Checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<AppDbContext>("sqlserver");
-
-// ---------------------------------------------------------
-// App — Pipeline de Middleware
-// ---------------------------------------------------------
+builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>("sqlserver");
 
 var app = builder.Build();
 
-// Swagger disponível em todos os ambientes para o MVP
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
@@ -85,24 +65,13 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
 });
 
-// CORS
 app.UseCors("AllowFrontend");
-
-// HTTPS Redirection
 app.UseHttpsRedirection();
-
-// Autorização (preparado para expansão futura)
 app.UseAuthorization();
 
-// Mapear Controllers
 app.MapControllers();
 
-// Health Check endpoint
 app.MapHealthChecks("/health");
-
-// ---------------------------------------------------------
-// Aplicar Migrations automaticamente (apenas para MVP)
-// ---------------------------------------------------------
 
 using (var scope = app.Services.CreateScope())
 {
@@ -112,16 +81,12 @@ using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await dbContext.Database.MigrateAsync();
-        logger.LogInformation("Migrations aplicadas com sucesso ao Azure SQL Database.");
+        logger.LogInformation("Migrations aplicadas com sucesso no banco de dados.");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Erro ao aplicar migrations no Azure SQL Database.");
+        logger.LogError(ex, "Erro ao aplicar migrations no banco de dados.");
     }
 }
-
-// ---------------------------------------------------------
-// Iniciar a API
-// ---------------------------------------------------------
 
 app.Run();

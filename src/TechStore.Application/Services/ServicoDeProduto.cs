@@ -112,11 +112,6 @@ public class ServicoDeProduto : IServicoDeProduto
         return true;
     }
 
-    /// <summary>
-    /// Realiza o mapeamento manual da entidade para o DTO.
-    /// </summary>
-    /// <param name="produto"></param>
-    /// <returns></returns>
     private static ProdutoRespostaDto ConverteParaDto(Produto produto)
     {
         return new ProdutoRespostaDto

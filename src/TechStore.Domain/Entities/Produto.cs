@@ -1,7 +1,7 @@
 namespace TechStore.Domain.Entities;
 
 /// <summary>
-/// Entidade de domínio que representa um Produto no catálogo da TechStore.
+/// Representa o Produto.
 /// </summary>
 public class Produto
 {

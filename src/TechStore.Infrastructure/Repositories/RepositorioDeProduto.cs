@@ -5,10 +5,6 @@ using TechStore.Infrastructure.Data;
 
 namespace TechStore.Infrastructure.Repositories;
 
-/// <summary>
-/// Implementação do repositório de Produtos usando Entity Framework Core.
-/// Implementa remoção lógica (soft delete) via campo Ativo.
-/// </summary>
 public class RepositorioDeProduto : IRepositorioDeProduto
 {
     private readonly AppDbContext _context;
@@ -52,9 +48,9 @@ public class RepositorioDeProduto : IRepositorioDeProduto
 
         if (produto is not null)
         {
-            // Remoção lógica (soft delete)
             produto.Ativo = false;
             produto.DataAtualizacao = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
         }
     }

@@ -1,13 +1,3 @@
-// =========================================================
-// TechStore Cloud — Frontend JavaScript
-// Cadastro, Listagem, Edição e Exclusão de Produtos
-// Consumindo a API ASP.NET Core via fetch
-// =========================================================
-
-// ---------------------------------------------------------
-// Configuração da API
-// ---------------------------------------------------------
-
 const API_BASE_URL = 'https://app-techstore-api-f2f7fhhjbge6bvgn.canadacentral-01.azurewebsites.net';
 const API_PRODUTOS = `${API_BASE_URL}/api/produtos`;
 
@@ -28,10 +18,6 @@ const tableContainer = document.getElementById('tabela-produtos-container');
 document.addEventListener('DOMContentLoaded', () => {
     carregarProdutos();
 });
-
-// ---------------------------------------------------------
-// CRUD — Carregar Produtos (GET)
-// ---------------------------------------------------------
 
 async function carregarProdutos() {
     try {
@@ -59,10 +45,6 @@ async function carregarProdutos() {
     }
 }
 
-// ---------------------------------------------------------
-// CRUD — Cadastrar Produto (POST)
-// ---------------------------------------------------------
-
 formProduto.addEventListener('submit', async function (event) {
     event.preventDefault();
 
@@ -78,16 +60,13 @@ formProduto.addEventListener('submit', async function (event) {
 
     try {
         let resposta;
-
         if (modoEdicao && produtoId) {
-            // PUT — Atualizar
             resposta = await fetch(`${API_PRODUTOS}/${produtoId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(produto)
             });
-        } else {
-            // POST — Criar
+        } else {            
             resposta = await fetch(API_PRODUTOS, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -118,16 +97,11 @@ formProduto.addEventListener('submit', async function (event) {
     }
 });
 
-// ---------------------------------------------------------
-// CRUD — Editar Produto (PUT)
-// ---------------------------------------------------------
-
 function editarProduto(id) {
     const produto = produtos.find(p => p.id === id);
 
     if (!produto) return;
 
-    // Preencher formulário
     document.getElementById('produto-id').value = produto.id;
     document.getElementById('nome').value = produto.nome;
     document.getElementById('descricao').value = produto.descricao || '';
@@ -135,7 +109,6 @@ function editarProduto(id) {
     document.getElementById('preco').value = produto.preco;
     document.getElementById('estoque').value = produto.quantidadeEstoque;
 
-    // Modo edição visual
     modoEdicao = true;
     formTitle.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -147,8 +120,7 @@ function editarProduto(id) {
     btnSubmitText.textContent = 'Atualizar Produto';
     btnSubmit.classList.add('btn-update');
     btnCancelEdit.style.display = 'block';
-
-    // Scroll até o formulário
+    
     document.getElementById('form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
     document.getElementById('nome').focus();
 }
@@ -168,10 +140,6 @@ function cancelarEdicao() {
     btnSubmit.classList.remove('btn-update');
     btnCancelEdit.style.display = 'none';
 }
-
-// ---------------------------------------------------------
-// CRUD — Excluir Produto (DELETE)
-// ---------------------------------------------------------
 
 function excluirProduto(id) {
     const produto = produtos.find(p => p.id === id);
@@ -198,7 +166,7 @@ async function confirmarExclusao() {
         }
 
         fecharModal();
-        showToast('🗑️ Produto excluído com sucesso!', 'success');
+        showToast('Produto excluído com sucesso!', 'success');
         await carregarProdutos();
 
     } catch (erro) {
@@ -212,10 +180,6 @@ function fecharModal() {
     document.getElementById('modal-overlay').classList.remove('show');
     produtoParaExcluir = null;
 }
-
-// ---------------------------------------------------------
-// Renderização da Tabela
-// ---------------------------------------------------------
 
 function renderizarTabela(listaProdutos) {
     if (listaProdutos.length === 0) {
@@ -259,10 +223,6 @@ function renderizarTabela(listaProdutos) {
     `).join('');
 }
 
-// ---------------------------------------------------------
-// Filtro de busca
-// ---------------------------------------------------------
-
 function filtrarProdutos() {
     const termo = searchInput.value.toLowerCase().trim();
 
@@ -280,31 +240,19 @@ function filtrarProdutos() {
     renderizarTabela(filtrados);
 }
 
-// ---------------------------------------------------------
-// Estatísticas do Dashboard
-// ---------------------------------------------------------
-
 function atualizarEstatisticas(listaProdutos) {
-    // Total de produtos
     document.getElementById('stat-total').textContent = listaProdutos.length;
 
-    // Categorias únicas
     const categorias = [...new Set(listaProdutos.map(p => p.categoria))];
     document.getElementById('stat-categories').textContent = categorias.length;
-
-    // Valor total em estoque
+    
     const valorTotal = listaProdutos.reduce((acc, p) => acc + (p.preco * p.quantidadeEstoque), 0);
     document.getElementById('stat-value').textContent =
         `R$ ${valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
-    // Total de itens em estoque
     const totalEstoque = listaProdutos.reduce((acc, p) => acc + p.quantidadeEstoque, 0);
     document.getElementById('stat-stock').textContent = totalEstoque.toLocaleString('pt-BR');
 }
-
-// ---------------------------------------------------------
-// Utilitários
-// ---------------------------------------------------------
 
 function getStockClass(quantidade) {
     if (quantidade <= 10) return 'stock-low';
@@ -317,10 +265,6 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
-
-// ---------------------------------------------------------
-// Toast Notification
-// ---------------------------------------------------------
 
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
